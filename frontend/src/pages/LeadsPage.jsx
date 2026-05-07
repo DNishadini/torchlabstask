@@ -5,7 +5,8 @@ import {
     FaStickyNote,
     FaTrash,
     FaSearch,
-    FaPlusCircle
+    FaPlusCircle,
+    FaEye
 } from "react-icons/fa";
 
 import api from "../services/api";
@@ -27,6 +28,8 @@ function LeadsPage() {
     const [noteContent, setNoteContent] = useState("");
 
     const [editingLeadId, setEditingLeadId] = useState(null);
+
+    const [viewLead, setViewLead] = useState(null);
 
     const [formData, setFormData] = useState({
         leadName: "",
@@ -627,6 +630,14 @@ function LeadsPage() {
                                         <td className="p-5 flex gap-3">
 
                                             <button
+                                                onClick={() => setViewLead(lead)}
+                                                className="flex items-center gap-2 bg-gradient-to-r from-purple-500 to-indigo-600 hover:scale-105 transition text-white px-4 py-2 rounded-xl"
+                                            >
+                                                <FaEye />
+                                                View
+                                            </button>
+
+                                            <button
                                                 onClick={() => fetchNotes(lead.id)}
                                                 className="flex items-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:scale-105 transition text-white px-4 py-2 rounded-xl"
                                             >
@@ -661,6 +672,129 @@ function LeadsPage() {
                     </table>
 
                 </div>
+
+                {
+                    viewLead && (
+
+                        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+
+                            <div className="w-full max-w-2xl bg-gradient-to-br from-slate-900 to-indigo-950 border border-white/10 rounded-3xl p-8 shadow-2xl relative">
+
+                                <button
+                                    onClick={() => setViewLead(null)}
+                                    className="absolute top-4 right-4 bg-red-500 hover:bg-red-600 transition text-white px-4 py-2 rounded-xl"
+                                >
+                                    X
+                                </button>
+
+                                <h2 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent mb-8">
+                                    Lead Details
+                                </h2>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                                    <div>
+                                        <p className="text-gray-400">
+                                            Lead Name
+                                        </p>
+
+                                        <h3 className="text-xl font-bold text-white mt-2">
+                                            {viewLead.leadName}
+                                        </h3>
+                                    </div>
+
+                                    <div>
+                                        <p className="text-gray-400">
+                                            Company
+                                        </p>
+
+                                        <h3 className="text-xl font-bold text-white mt-2">
+                                            {viewLead.companyName}
+                                        </h3>
+                                    </div>
+
+                                    <div>
+                                        <p className="text-gray-400">
+                                            Email
+                                        </p>
+
+                                        <h3 className="text-xl font-bold text-white mt-2">
+                                            {viewLead.email}
+                                        </h3>
+                                    </div>
+
+                                    <div>
+                                        <p className="text-gray-400">
+                                            Phone Number
+                                        </p>
+
+                                        <h3 className="text-xl font-bold text-white mt-2">
+                                            {viewLead.phoneNumber}
+                                        </h3>
+                                    </div>
+
+                                    <div>
+                                        <p className="text-gray-400">
+                                            Lead Source
+                                        </p>
+
+                                        <h3 className="text-xl font-bold text-cyan-300 mt-2">
+                                            {viewLead.leadSource}
+                                        </h3>
+                                    </div>
+
+                                    <div>
+                                        <p className="text-gray-400">
+                                            Assigned Salesperson
+                                        </p>
+
+                                        <h3 className="text-xl font-bold text-purple-300 mt-2">
+                                            {viewLead.assignedSalesperson}
+                                        </h3>
+                                    </div>
+
+                                    <div>
+                                        <p className="text-gray-400">
+                                            Status
+                                        </p>
+
+                                        <h3 className="text-xl font-bold text-green-400 mt-2">
+                                            {viewLead.status}
+                                        </h3>
+                                    </div>
+
+                                    <div>
+                                        <p className="text-gray-400">
+                                            Estimated Deal Value
+                                        </p>
+
+                                        <h3 className="text-xl font-bold text-yellow-400 mt-2">
+                                            ${viewLead.estimatedDealValue}
+                                        </h3>
+                                    </div>
+
+                                    <div className="md:col-span-2">
+                                        <p className="text-gray-400">
+                                            Created Date
+                                        </p>
+
+                                        <h3 className="text-lg font-semibold text-white mt-2">
+                                            {
+                                                new Date(
+                                                    viewLead.createdAt
+                                                ).toLocaleString()
+                                            }
+                                        </h3>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    )
+                }
 
                 {/* Notes Section */}
                 {
