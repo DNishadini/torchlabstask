@@ -1,51 +1,46 @@
 import {
-  BrowserRouter,
-  Routes,
-  Route
+    BrowserRouter,
+    Routes,
+    Route
 } from "react-router-dom";
 
 import LoginPage from "./pages/LoginPage";
+
 import DashboardPage from "./pages/DashboardPage";
+
 import LeadsPage from "./pages/LeadsPage";
 
-import ProtectedRoute from "./routes/ProtectedRoute";
+import MainLayout from "./layouts/MainLayout";
 
 function App() {
 
-  return (
+    return (
 
-    <BrowserRouter>
+        <BrowserRouter>
 
-      <Routes>
+            <Routes>
 
-        <Route
-          path="/"
-          element={<LoginPage />}
-        />
+                <Route path="/" element={<LoginPage />} />
 
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <DashboardPage />
-            </ProtectedRoute>
-          }
-        />
+                <Route element={<MainLayout />}>
 
-        <Route
-          path="/leads"
-          element={
-            <ProtectedRoute>
-              <LeadsPage />
-            </ProtectedRoute>
-          }
-        />
+                    <Route
+                        path="/dashboard"
+                        element={<DashboardPage />}
+                    />
 
-      </Routes>
+                    <Route
+                        path="/leads"
+                        element={<LeadsPage />}
+                    />
 
-    </BrowserRouter>
+                </Route>
 
-  );
+            </Routes>
+
+        </BrowserRouter>
+
+    );
 
 }
 
