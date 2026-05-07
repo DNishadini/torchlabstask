@@ -45,6 +45,17 @@ exports.getDashboardStats = async (req, res) => {
             }
         );
 
+        const wonLeadsData = await Lead.findAll({
+            where: {
+                status: "Won"
+            }
+        });
+
+        const totalWonDealValue = wonLeadsData.reduce(
+            (sum, lead) => sum + Number(lead.estimatedDealValue),
+            0
+        );
+
         res.json({
             totalLeads,
             newLeads,

@@ -330,6 +330,29 @@ function DashboardPage() {
 
                 </div>
 
+                {/* Won Deal Value */}
+                <div className="backdrop-blur-xl bg-white/10 border border-white/10 rounded-3xl p-8 shadow-2xl hover:scale-[1.02] transition-all duration-300">
+
+                    <div className="flex justify-between items-center">
+
+                        <div>
+
+                            <p className="text-gray-300 text-lg">
+                                Won Deals Value
+                            </p>
+
+                            <h2 className="text-5xl font-bold mt-4 text-green-400">
+                                ${stats.wonDealValue}
+                            </h2>
+
+                        </div>
+
+                        <FaDollarSign className="text-6xl text-green-400 opacity-80" />
+
+                    </div>
+
+                </div>
+
             </div>
 
                 {/* Charts Section */}
