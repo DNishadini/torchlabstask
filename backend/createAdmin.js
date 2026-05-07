@@ -14,13 +14,16 @@ const createAdmin = async () => {
 
         const existingUser = await User.findOne({
             where: {
-                email: "admin@example.com"
+                email: "dinushika@gmail.com"
             }
         });
 
         if (existingUser) {
+
             console.log("Admin already exists");
+
             process.exit();
+
         }
 
         const hashedPassword = await bcrypt.hash(
@@ -29,12 +32,16 @@ const createAdmin = async () => {
         );
 
         await User.create({
-            name: "Admin",
-            email: "admin@example.com",
+
+            name: "Dinushika",
+
+            email: "dinushika@gmail.com",
+
             password: hashedPassword
+
         });
 
-        console.log("Admin created successfully");
+        console.log("New admin created successfully");
 
         process.exit();
 
@@ -43,6 +50,7 @@ const createAdmin = async () => {
         console.log(error);
 
     }
+
 };
 
 createAdmin();
