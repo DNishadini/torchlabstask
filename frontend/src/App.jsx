@@ -12,6 +12,8 @@ import LeadsPage from "./pages/LeadsPage";
 
 import MainLayout from "./layouts/MainLayout";
 
+import ProtectedRoute from "./components/ProtectedRoute";
+
 function App() {
 
     return (
@@ -20,9 +22,20 @@ function App() {
 
             <Routes>
 
-                <Route path="/" element={<LoginPage />} />
+                {/* Public Route */}
+                <Route
+                    path="/"
+                    element={<LoginPage />}
+                />
 
-                <Route element={<MainLayout />}>
+                {/* Protected Routes */}
+                <Route
+                    element={
+                        <ProtectedRoute>
+                            <MainLayout />
+                        </ProtectedRoute>
+                    }
+                >
 
                     <Route
                         path="/dashboard"

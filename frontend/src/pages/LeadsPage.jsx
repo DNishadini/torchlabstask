@@ -18,11 +18,15 @@ function LeadsPage() {
 
     const [statusFilter, setStatusFilter] = useState("");
 
+    const [leadSourceFilter, setLeadSourceFilter] = useState("");
+    
     const [selectedLeadId, setSelectedLeadId] = useState(null);
 
     const [notes, setNotes] = useState([]);
 
     const [noteContent, setNoteContent] = useState("");
+
+    const [editingLeadId, setEditingLeadId] = useState(null);
 
     const [formData, setFormData] = useState({
         leadName: "",
@@ -41,7 +45,7 @@ function LeadsPage() {
 
         fetchLeads();
 
-    }, [search, statusFilter]);
+    }, [search, statusFilter, leadSourceFilter]);
 
     const fetchLeads = async () => {
 
@@ -54,7 +58,11 @@ function LeadsPage() {
             }
 
             if (statusFilter) {
-                url += `status=${statusFilter}`;
+                url += `status=${statusFilter}&`;
+            }
+
+            if (leadSourceFilter) {
+                url += `leadSource=${leadSourceFilter}`;
             }
 
             const response = await api.get(
@@ -91,17 +99,35 @@ function LeadsPage() {
 
         try {
 
-            await api.post(
-                "/leads",
-                formData,
-                {
-                    headers: {
-                        Authorization: token
+            if (editingLeadId) {
+
+                await api.put(
+                    `/leads/${editingLeadId}`,
+                    formData,
+                    {
+                        headers: {
+                            Authorization: token
+                        }
                     }
-                }
-            );
+                );
+
+            } else {
+
+                await api.post(
+                    "/leads",
+                    formData,
+                    {
+                        headers: {
+                            Authorization: token
+                        }
+                    }
+                );
+
+            }
 
             fetchLeads();
+
+            setEditingLeadId(null);
 
             setFormData({
                 leadName: "",
@@ -273,6 +299,25 @@ function LeadsPage() {
 
     };
 
+    const handleEdit = (lead) => {
+
+        setEditingLeadId(lead.id);
+
+        setFormData({
+
+            leadName: lead.leadName,
+            companyName: lead.companyName,
+            email: lead.email,
+            phoneNumber: lead.phoneNumber,
+            leadSource: lead.leadSource,
+            assignedSalesperson: lead.assignedSalesperson,
+            status: lead.status,
+            estimatedDealValue: lead.estimatedDealValue
+
+        });
+
+    };
+
     return (
 
         <div className="bg-gradient-to-br from-black via-slate-950 to-indigo-950 text-white p-8 relative overflow-hidden">
@@ -350,6 +395,38 @@ function LeadsPage() {
 
                     </select>
 
+                    <select
+                        value={leadSourceFilter}
+                        onChange={(e) => setLeadSourceFilter(e.target.value)}
+                        className="bg-white/10 backdrop-blur-xl border border-white/10 text-white p-4 rounded-2xl outline-none focus:ring-2 focus:ring-cyan-500"
+                    >
+
+                        <option className="bg-slate-900" value="">
+                            All Sources
+                        </option>
+
+                        <option className="bg-slate-900" value="LinkedIn">
+                            LinkedIn
+                        </option>
+
+                        <option className="bg-slate-900" value="Website">
+                            Website
+                        </option>
+
+                        <option className="bg-slate-900" value="Referral">
+                            Referral
+                        </option>
+
+                        <option className="bg-slate-900" value="Cold Email">
+                            Cold Email
+                        </option>
+
+                        <option className="bg-slate-900" value="Event">
+                            Event
+                        </option>
+
+                    </select>
+
                 </div>
 
                 {/* Create Lead Form */}
@@ -394,14 +471,38 @@ function LeadsPage() {
                         className="bg-black/20 border border-gray-600 text-white placeholder-gray-400 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-cyan-500"
                     />
 
-                    <input
-                        type="text"
+                    <select
                         name="leadSource"
-                        placeholder="Lead Source"
                         value={formData.leadSource}
                         onChange={handleChange}
-                        className="bg-black/20 border border-gray-600 text-white placeholder-gray-400 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-cyan-500"
-                    />
+                        className="bg-black/20 border border-gray-600 text-white p-4 rounded-2xl outline-none focus:ring-2 focus:ring-cyan-500"
+                    >
+
+                        <option className="bg-slate-900" value="">
+                            Select Lead Source
+                        </option>
+
+                        <option className="bg-slate-900" value="LinkedIn">
+                            LinkedIn
+                        </option>
+
+                        <option className="bg-slate-900" value="Website">
+                            Website
+                        </option>
+
+                        <option className="bg-slate-900" value="Referral">
+                            Referral
+                        </option>
+
+                        <option className="bg-slate-900" value="Cold Email">
+                            Cold Email
+                        </option>
+
+                        <option className="bg-slate-900" value="Event">
+                            Event
+                        </option>
+
+                    </select>
 
                     <input
                         type="text"
@@ -425,8 +526,13 @@ function LeadsPage() {
                         type="submit"
                         className="flex items-center justify-center gap-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:scale-[1.02] transition-all duration-300 text-white font-bold p-4 rounded-2xl shadow-lg shadow-cyan-500/20"
                     >
-                        <FaPlusCircle />
-                        Create Lead
+                       <FaPlusCircle />
+
+                        {
+                            editingLeadId
+                                ? "Update Lead"
+                                : "Create Lead"
+                        }
                     </button>
 
                 </form>
@@ -526,6 +632,13 @@ function LeadsPage() {
                                             >
                                                 <FaStickyNote />
                                                 Notes
+                                            </button>
+
+                                            <button
+                                                onClick={() => handleEdit(lead)}
+                                                className="flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:scale-105 transition text-white px-4 py-2 rounded-xl"
+                                            >
+                                                Edit
                                             </button>
 
                                             <button
