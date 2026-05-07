@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import Swal from "sweetalert2";
 
 import {
     FaUsers,
@@ -7,7 +7,9 @@ import {
     FaCheckCircle,
     FaTrophy,
     FaTimesCircle,
-    FaDollarSign
+    FaDollarSign,
+    FaPhoneAlt,
+    FaPaperPlane
 } from "react-icons/fa";
 
 import {
@@ -40,8 +42,18 @@ function DashboardPage() {
         },
 
         {
+            name: "Contacted",
+            value: stats?.contactedLeads || 0
+        },
+
+        {
             name: "Qualified",
             value: stats?.qualifiedLeads || 0
+        },
+
+        {
+            name: "Proposal Sent",
+            value: stats?.proposalSentLeads || 0
         },
 
         {
@@ -58,7 +70,9 @@ function DashboardPage() {
 
     const COLORS = [
         "#06b6d4",
+        "#3b82f6",
         "#8b5cf6",
+        "#f59e0b",
         "#10b981",
         "#ef4444"
     ];
@@ -66,8 +80,13 @@ function DashboardPage() {
     const barData = [
 
         {
-            name: "Leads",
-            total: stats?.totalLeads || 0
+            name: "New",
+            total: stats?.newLeads || 0
+        },
+
+        {
+            name: "Contacted",
+            total: stats?.contactedLeads || 0
         },
 
         {
@@ -76,8 +95,18 @@ function DashboardPage() {
         },
 
         {
+            name: "Proposal",
+            total: stats?.proposalSentLeads || 0
+        },
+
+        {
             name: "Won",
             total: stats?.wonLeads || 0
+        },
+
+        {
+            name: "Lost",
+            total: stats?.lostLeads || 0
         }
 
     ];
@@ -238,6 +267,29 @@ function DashboardPage() {
 
                 </div>
 
+                {/* Contacted Leads */}
+                <div className="backdrop-blur-xl bg-white/10 border border-white/10 rounded-3xl p-8 shadow-2xl hover:scale-[1.02] transition-all duration-300">
+
+                    <div className="flex justify-between items-center">
+
+                        <div>
+
+                            <p className="text-gray-300 text-lg">
+                                Contacted Leads
+                            </p>
+
+                            <h2 className="text-5xl font-bold mt-4 text-blue-400">
+                                {stats.contactedLeads}
+                            </h2>
+
+                        </div>
+
+                        <FaPhoneAlt className="text-6xl text-blue-400 opacity-80" />
+
+                    </div>
+
+                </div>
+
                 {/* Qualified Leads */}
                 <div className="backdrop-blur-xl bg-white/10 border border-white/10 rounded-3xl p-8 shadow-2xl hover:scale-[1.02] transition-all duration-300">
 
@@ -256,6 +308,29 @@ function DashboardPage() {
                         </div>
 
                         <FaCheckCircle className="text-6xl text-purple-400 opacity-80" />
+
+                    </div>
+
+                </div>
+
+                {/* Proposal Sent */}
+                <div className="backdrop-blur-xl bg-white/10 border border-white/10 rounded-3xl p-8 shadow-2xl hover:scale-[1.02] transition-all duration-300">
+
+                    <div className="flex justify-between items-center">
+
+                        <div>
+
+                            <p className="text-gray-300 text-lg">
+                                Proposal Sent
+                            </p>
+
+                            <h2 className="text-5xl font-bold mt-4 text-orange-400">
+                                {stats.proposalSentLeads}
+                            </h2>
+
+                        </div>
+
+                        <FaPaperPlane className="text-6xl text-orange-400 opacity-80" />
 
                     </div>
 

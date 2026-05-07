@@ -1,7 +1,5 @@
 const Lead = require("../models/Lead");
 
-const { Op } = require("sequelize");
-
 exports.getDashboardStats = async (req, res) => {
 
     try {
@@ -14,9 +12,21 @@ exports.getDashboardStats = async (req, res) => {
             }
         });
 
+        const contactedLeads = await Lead.count({
+            where: {
+                status: "Contacted"
+            }
+        });
+
         const qualifiedLeads = await Lead.count({
             where: {
                 status: "Qualified"
+            }
+        });
+
+        const proposalSentLeads = await Lead.count({
+            where: {
+                status: "Proposal Sent"
             }
         });
 
@@ -45,25 +55,26 @@ exports.getDashboardStats = async (req, res) => {
             }
         );
 
-        const wonLeadsData = await Lead.findAll({
-            where: {
-                status: "Won"
-            }
-        });
-
-        const totalWonDealValue = wonLeadsData.reduce(
-            (sum, lead) => sum + Number(lead.estimatedDealValue),
-            0
-        );
-
         res.json({
+
             totalLeads,
+
             newLeads,
+
+            contactedLeads,
+
             qualifiedLeads,
+
+            proposalSentLeads,
+
             wonLeads,
+
             lostLeads,
+
             totalDealValue: totalDealValue || 0,
+
             wonDealValue: wonDealValue || 0
+
         });
 
     } catch (error) {
