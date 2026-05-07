@@ -1,7 +1,5 @@
 import { useState } from "react";
-
 import { useNavigate } from "react-router-dom";
-
 import api from "../services/api";
 
 function LoginPage() {
@@ -9,14 +7,16 @@ function LoginPage() {
     const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
-
     const [password, setPassword] = useState("");
-
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleLogin = async (e) => {
 
         e.preventDefault();
+
+        setLoading(true);
+        setError("");
 
         try {
 
@@ -40,6 +40,10 @@ function LoginPage() {
             console.log(error);
 
             setError("Invalid credentials");
+
+        } finally {
+
+            setLoading(false);
 
         }
 
@@ -113,9 +117,26 @@ function LoginPage() {
 
                 <button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-cyan-500/40 transition-all duration-300 hover:scale-[1.02]"
+                    disabled={loading}
+                    className={`w-full flex items-center justify-center gap-2 font-bold py-4 rounded-xl shadow-lg transition-all duration-300
+                    ${
+                        loading
+                            ? "bg-gray-600 cursor-not-allowed"
+                            : "bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 hover:shadow-cyan-500/40 hover:scale-[1.02]"
+                    } text-white`}
                 >
-                    Login
+
+                    {
+                        loading ? (
+                            <>
+                                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                Logging in...
+                            </>
+                        ) : (
+                            "Login"
+                        )
+                    }
+
                 </button>
 
                 <div className="mt-6 text-center text-gray-400 text-sm">
