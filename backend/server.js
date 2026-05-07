@@ -3,6 +3,8 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const testRoutes = require("./routes/testRoutes");
 const leadRoutes = require("./routes/leadRoutes");
+const noteRoutes = require("./routes/noteRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes");
 
 const sequelize = require("./config/db");
 
@@ -19,6 +21,8 @@ const authRoutes = require("./routes/authRoutes");
 app.use("/api/auth", authRoutes);
 app.use("/api/test", testRoutes);
 app.use("/api/leads", leadRoutes);
+app.use("/api/notes", noteRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 app.get("/", (req, res) => {
     res.send("CRM Backend Running");

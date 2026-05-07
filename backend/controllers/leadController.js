@@ -1,5 +1,7 @@
 const Lead = require("../models/Lead");
 
+const { Op } = require("sequelize");
+
 exports.createLead = async (req, res) => {
 
     try {
@@ -24,7 +26,55 @@ exports.getAllLeads = async (req, res) => {
 
     try {
 
+        const {
+            status,
+            leadSource,
+            assignedSalesperson,
+            search
+        } = req.query;
+
+        let whereClause = {};
+
+        if (status) {
+            whereClause.status = status;
+        }
+
+        if (leadSource) {
+            whereClause.leadSource = leadSource;
+        }
+
+        if (assignedSalesperson) {
+            whereClause.assignedSalesperson = assignedSalesperson;
+        }
+
+        if (search) {
+
+            whereClause[Op.or] = [
+
+                {
+                    leadName: {
+                        [Op.iLike]: `%${search}%`
+                    }
+                },
+
+                {
+                    companyName: {
+                        [Op.iLike]: `%${search}%`
+                    }
+                },
+
+                {
+                    email: {
+                        [Op.iLike]: `%${search}%`
+                    }
+                }
+
+            ];
+
+        }
+
         const leads = await Lead.findAll({
+            where: whereClause,
             order: [["createdAt", "DESC"]]
         });
 

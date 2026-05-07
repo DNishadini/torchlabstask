@@ -6,7 +6,19 @@ const authMiddleware = require("../middleware/authMiddleware");
 
 const leadController = require("../controllers/leadController");
 
-router.post("/", authMiddleware, leadController.createLead);
+const validationMiddleware = require("../middleware/validationMiddleware");
+
+const {
+    createLeadValidation
+} = require("../validators/leadValidator");
+
+router.post(
+    "/",
+    authMiddleware,
+    createLeadValidation,
+    validationMiddleware,
+    leadController.createLead
+);
 
 router.get("/", authMiddleware, leadController.getAllLeads);
 
